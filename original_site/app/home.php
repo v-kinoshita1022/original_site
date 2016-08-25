@@ -5,7 +5,9 @@ session_start();
 
 $name = isset ($_SESSION['name']) ? $_SESSION['name'] : null;
 $user_id = isset ($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-echo var_dump($user_id);
+//echo var_dump($user_id);
+//$datetime =new DateTime();
+//echo $datetime;
  ?>
 
  <!DOCTYPE html>
@@ -14,33 +16,43 @@ echo var_dump($user_id);
  <meta charset="UTF-8">
  <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/style.css">
+
 
 
        <title>ホーム</title>
        <!-- <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
  </head>
  <body>
 
-   <header class="container" style="padding:20px 0">
-     <a href="<?= HOME ?> ">HOME</a>
-     <a href="<?= INFORMATION ?> ">INFOMATION</a>
-     <a href="<?= MESSAGE ?> ">MESSAGE</a>
-     <a href="<?= RANKING ?> ">RANKING</a>
-
-       <form method="get" action="#" class="search">
-          <div>
+   <div class="header">
+     <div class="header_left">
+       <ul>
+         <li><a href="<?= HOME ?> ">ホーム</a></li>
+         <li><a href="<?= INFORMATION ?> ">通知</a></li>
+         <li><a href="<?= MESSAGE ?> ">メッセージ</a></li>
+         <li><a href="<?= RANKING ?> ">ランキング</a></li>
+      </ul>
+     </div>
+     <div class="header_right">
+       <ul>
+        <li>
+          <form method="get" action="#" class="search">
             <input type="text" name="example" class="textBox">
             <input type="submit" value="検索" class="btn">
-          </div>
-       </form>
+          </form>
+        </li>
 
-       <a href="<?php echo TOP_URI?>" id="logout">ログアウト</a>
+       <li><a href="<?php echo TOP_URI?>" id="logout">ログアウト</a></li>
     <!--   <div class="modal_post">
         <input tyope="button" name="post" value="投稿">
     </div> -->
-      <a data-toggle="modal" href="#myModal" class="btn btn-primary">投稿</a>
+      <li><a data-toggle="modal" href="#myModal" class="btn btn-primary">投稿</a></li>
+     </ul>
+    </div>
 
       <div class="modal fade" id="myModal" >
        <div class="modal-dialog">
@@ -68,44 +80,53 @@ echo var_dump($user_id);
          </div>
        </div>
       </div>
-   </header>
-
-   <div title="profiles">
-<?php if (isset( $name, $user_id)) {//ログイン常態ならDBからユーザー情報を取得して表示する
-            $user_profiles = search_profiles($name, $user_id  );
-        }
-      echo var_dump($user_profiles);
-       if (array_keys($user_profiles)){
-         //if ($user_profiles[0]['profileImg'] != null){echo $user_profiles[0]['profileImg'];}else{echo <img //src="img.php"/>;<?php}
-         echo $user_profiles[0]['username'].'<br>';?>
-         投稿<?php if ($user_profiles[0]['post_num'] != null){echo $user_profiles[0]['postNum'];}else{echo '0';}?>
-         follower<?php if ($user_profiles[0]['follower_num'] != null){echo $user_profiles[0]['followerNum'];}else{echo '0';}?>
-         follow<?php if ($user_profiles[0]['follow_num'] != null){echo $user_profiles[0]['followNamu'];}else{echo '0';}
-       }?>
    </div>
 
-<?php
-//ログインしているならとうこう投稿情報を取得
-if(isset($name, $user_id)){
-  $posts = show_posts($user_id);
-}
-echo var_dump($posts);
-?>
-<table border='1' cellspacing='0' cellpadding='5' width='500'>
-<?php
-foreach ($posts as $key => $list){
-	echo "<tr valign='top'>\n";
-	echo "<td>".$list['title'] ."</td>\n";
-	echo "<td>".$list['img'] ."</td>\n";
-	echo "<td>".$list['startTime'] ."</td>\n";
-	echo "<td>".$list['place'] ."<br/>\n";
-	echo "<td>".$list['detail'] ."<br/>\n";
-	echo "<td>".$list['tags'] ."<br/>\n";
-	echo "<small>".$list['stamp'] ."</small></td>\n";
-	echo "</tr>\n";
-}
-?>
-</table>
+<div class="main">
+      <div class="sidebar_left">
+        <div class="profiles">
+          <?php if (isset( $name, $user_id)) {//ログイン常態ならDBからユーザー情報を取得して表示する
+                 $user_profiles = search_profiles($name, $user_id);
+                }
+          //echo var_dump($user_profiles);
+                if (array_keys($user_profiles)){
+             //if ($user_profiles[0]['profileImg'] != null){echo $user_profiles[0]['profileImg'];}else{echo <img //src="img.php"/>;<?php}
+             echo $user_profiles[0]['username'].'<br>';?>
+             投稿<?php echo $user_profiles[0]['post_num'];?>
+             follower<?php echo $user_profiles[0]['follower_num'];?>
+             follow<?php echo $user_profiles[0]['follow_num'];}?>
+        </div>
+      </div>
+
+    <?php
+    //ログインしているなら投稿情報を取得
+    if(isset($name, $user_id)){
+      $posts = show_posts($user_id);
+    }
+    //echo var_dump($posts);?>
+
+    <div class="content">
+
+      <?php //取得した投稿情報をテーブルに入れ、タイムラインを表現
+        array_multisort($posts, SORT_DESC);
+          foreach ($posts as $key ){?>
+            <table table rules="groups" border='1' cellspacing='0' cellpadding='5' width='500'>
+      <?php  foreach ($key as $list => $value){
+
+                 if (isset($value)){
+                  echo "<tr valign='top'>\n";
+                	echo "<td>".$value."</td>\n";
+                    }
+            	      echo "</tr>\n";
+                }
+            }?>
+      </table>
+
+    </div>
+
+  <div class="sidebar_right"></div>
+
+</div>
 
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
