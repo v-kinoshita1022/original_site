@@ -10,29 +10,20 @@ body{
     margin: 0;
     padding: 0;
     positiion: relative;
-    min-width: 600px;   /*中央配置するボックスの横幅*/
-    min-height: 400px;  /*中央配置するボックスの縦幅*/
+    min-width: 60%;   /*中央配置するボックスの横幅*/
+
     background-color:#00bfff;
 }
 
-.content{
-    margin: -200px 0 0 -300px;  /*縦横半分をネガティブマージンでずらす*/
-    position: absolute;     /*body要素に対して絶対配置*/
-    top: 50%;       /*上端を中央に*/
-    left: 50%;      /*左端を中央に*/
-    width: 600px;   /*横幅*/
-    height: 400px;  /*縦幅*/
-    background-color:#ffffff;
-}
 
 .header {
     position: fixed;            /* ヘッダーの固定 */
     top: 0px;                   /* 位置(上0px) */
     left: 0px;                  /* 位置(右0px) */
     width: 100%;                /* 横幅100% */
-    height: 140px;              /* 縦幅140px */
+    height: 80px;              /* 縦幅140px */
     font-size: large;
-		border-bottom: 1px solid;
+		border-bottom: 1px solid red;
 }
 
 .header_left {
@@ -56,11 +47,31 @@ body{
   padding:20px 20px;
 }
 
-.main {            /* ヘッダーの固定 */
-  margin-top: 70px;               /* 位置(上0px) */
+.main {
+  margin-top: 70px;     /* 位置(上70px) */
+	width: 100%;
   }
 
-.container {
+/*.container {
   display: table;
   width: 60%;
+} */
+
+.sidebar_left{
+	background-color: coral;
+	float: left;
+	width: 20%;
+}
+
+.content{
+	position: absolute;     /*body要素に対して絶対配置*/
+	background-color: lightgreen;
+	float: left;
+	width: 60%;
+}
+
+.sidebar_right{
+	background-color: skyblue;
+	float: left;
+	width: 20%;
 }
