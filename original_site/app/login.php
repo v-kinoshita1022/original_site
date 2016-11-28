@@ -27,9 +27,11 @@ if (isset($name, $password)){
 
         header("Location: home.php");//ログイン成功ならホーム画面に移動
       }else{
+        $_SESSION['login_error'] = '*ユーザーネーム又はパスワードに誤りがあります';
         //header("Location: top.php");//ログイン失敗ならトップに戻る
+
         //echo $login[0]['id'];
-        echo var_dump($login);
+        var_dump($login, $name, $password);
         echo 'error';
       }
 
